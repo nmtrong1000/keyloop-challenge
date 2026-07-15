@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useSubmitAction } from "@/shared/store/useSubmitAction";
+import { useSubmitAction } from "../hooks/useSubmitAction";
+import { Button } from "@/shared/components/Button";
 
 const actionSchema = z.object({
   action: z.string().trim().min(1, "Enter a status or proposed action."),
@@ -38,13 +39,9 @@ export function ActionForm({ vehicleId }: { vehicleId: string }) {
           placeholder="e.g. Price Reduction Planned"
           className="flex-1 rounded border border-outline-variant bg-surface-container-lowest px-4 py-2 text-body-sm focus:border-secondary focus:outline-none"
         />
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="cursor-pointer rounded border border-outline-variant px-4 py-2 text-body-sm enabled:hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
-        >
+        <Button type="submit" disabled={isSubmitting}>
           Submit
-        </button>
+        </Button>
       </div>
       {errors.action ? (
         <p role="alert" className="text-label-sm text-error">

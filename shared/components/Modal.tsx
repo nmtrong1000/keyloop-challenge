@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { Button } from "./Button";
 
 export interface ModalProps {
   open: boolean;
@@ -43,14 +44,9 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
           {title ? (
             <h2 className="font-headline text-headline-md text-on-surface">{title}</h2>
           ) : null}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="cursor-pointer text-on-surface-variant hover:text-on-surface"
-          >
+          <Button variant="ghost" onClick={onClose} aria-label="Close">
             ✕
-          </button>
+          </Button>
         </div>
         {children}
       </div>

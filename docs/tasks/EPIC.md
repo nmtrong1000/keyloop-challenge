@@ -5,7 +5,7 @@
 - Issue type: Epic
 - Priority: High
 - Status: COMPLETED
-- Version: 1.3
+- Version: 1.5
 
 ---
 
@@ -46,6 +46,13 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 - **STORY_09**: Observability Instrumentation (COMPLETED — re-scoped, see story file)
 - **STORY_10**: Responsive, Cross-Browser & Accessibility Verification (COMPLETED — found & fixed a real mobile overflow bug)
 - **STORY_11**: UI System Refactor (Design Tokens & Page Shell) (COMPLETED)
+- **STORY_12**: Module-Owned Types (COMPLETED)
+- **STORY_13**: Module-Owned Domain Logic (COMPLETED)
+- **STORY_14**: Module-Owned Data Access Layer (COMPLETED)
+- **STORY_15**: Module-Owned State (Store & Hooks Split) (COMPLETED)
+- **STORY_16**: Inventory Composition Rename (COMPLETED)
+- **STORY_17**: Observability Completion (Metrics & Traces) (COMPLETED)
+- **STORY_18**: Shared Component Library (Generic Primitives) (COMPLETED)
 
 ## Dependencies
 
@@ -61,14 +68,14 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 
 ## Success Metrics
 
-- **Story Completion**: 11/11 child stories COMPLETED
-- **Test Coverage**: 98 Jest tests covering aging calc, filters, sorting, pagination, DAL, state, and all three UI modules — met
+- **Story Completion**: 18/18 child stories COMPLETED
+- **Test Coverage**: 99 Jest tests covering aging calc, filters, sorting, pagination, DAL, state, and all three UI modules — met
 - **Cross-Browser Pass Rate**: 16/16 Playwright tests pass on Chrome and Safari; Edge represented via Chromium (see STORY_10) — met with a documented substitution
 - **Render Performance**: Verified ~300-700ms per page in practice, against the 2s/500-vehicle target — met
 
 ## Known Gaps (carried from child stories, not silently dropped)
 
-- **SDD's "SSR is actively used" claim is not true in this build** (STORY_07): composing `InventoryPage` via render-prop slots forced `app/page.tsx` to become a Client Component; the whole page is client-rendered, not server-prefetched/hydrated.
+- **SDD's "SSR is actively used" claim is not true in this build** (STORY_07): composing `InventoryView` (renamed from `InventoryPage` in STORY_16) via render-prop slots forced `app/page.tsx` to become a Client Component; the whole page is client-rendered, not server-prefetched/hydrated.
 - **"Edge" browser coverage is Chromium, not the real msedge channel** (STORY_10): installing real Edge needs `sudo`, unavailable in this sandboxed environment.
 - **`docs/tasks/STORY_02.md`'s frozen contract needed three follow-up amendments** (`currentStatus` in STORY_07, `GET /vehicles/:id/actions` in STORY_08, `sortBy`/`sortDir` in STORY_06) — contract-first didn't fully anticipate the read side of Actionable Insights or column sorting. All three amendments are backward-compatible additions, not breaking changes.
 - **`DESIGN.md` has no "warning" color role** (STORY_11): the aging-stock badge/banner still uses Tailwind's built-in amber palette rather than a design-system token, since none exists for that semantic state.
@@ -77,6 +84,12 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 ---
 
 ## Changelog
+
+### v1.5
+- STORY_18 (Shared Component Library) completed: epic re-closed at 18/18. STORY_12–18's module-boundary and shared-component cleanup pass is done — `shared/domain`, `shared/dal`, and `shared/store` no longer exist as flat, undifferentiated folders; each module owns its own domain logic, DAL, and state; `shared/types` holds only the API contract; observability's three pillars (Logs/Metrics/Traces) are all wrapped consistently; and six generic UI primitives (`Select`, `Table`, `PaginationControls`, `Badge`, `MetricCard`, `Button`) replace what were hand-rolled, drifted implementations. No SRS requirement changed — this was an internal architecture and reusability pass, verified with the full Jest (99/99) and Playwright (16/16) suites passing unchanged throughout.
+
+### v1.4
+- Reopened: added STORY_12–18 — a module-boundary cleanup pass (types, domain, DAL, state, naming, observability, shared UI primitives). Not a new SRS requirement — code that was placed in `shared/` without actually being shared by more than one module gets relocated to the module that owns it, and generic UI patterns get extracted into reusable primitives.
 
 ### v1.3
 - Reopened and re-closed STORY_06: added page-size selection and column sorting (Make/Model/Intake Date) to the Inventory module, with a third backward-compatible contract amendment (`sortBy`/`sortDir`). Not a new SRS requirement — a usability improvement to the existing pagination/list feature.

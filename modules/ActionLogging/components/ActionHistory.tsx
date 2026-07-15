@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useVehicleActionsQuery } from "@/shared/store/useVehicleActionsQuery";
+import { useVehicleActionsQuery } from "../hooks/useVehicleActionsQuery";
+import { Button } from "@/shared/components/Button";
 
 export function ActionHistory({ vehicleId }: { vehicleId: string }) {
   const { data, isLoading, isError } = useVehicleActionsQuery(vehicleId, true);
@@ -48,13 +49,9 @@ export function ActionHistory({ vehicleId }: { vehicleId: string }) {
               <span className="font-mono text-label-sm text-on-surface-variant">
                 {new Date(record.timestamp).toLocaleString()}
               </span>
-              <button
-                type="button"
-                onClick={() => toggle(i)}
-                className="cursor-pointer text-label-sm text-secondary underline"
-              >
+              <Button variant="link" onClick={() => toggle(i)}>
                 {isExpanded ? "Show less" : "Show more"}
-              </button>
+              </Button>
             </div>
           </li>
         );

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { Vehicle } from "@/shared/types/api";
-import { isAgingVehicle } from "@/shared/domain/aging";
+import { isAgingVehicle } from "@/modules/AgingStock";
 import { Modal } from "@/shared/components/Modal";
+import { Button } from "@/shared/components/Button";
 import { ActionForm } from "./ActionForm";
 import { ActionHistory } from "./ActionHistory";
 
@@ -13,13 +14,9 @@ export function AgingVehicleExtras({ vehicle }: { vehicle: Vehicle }) {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="w-fit cursor-pointer rounded border border-outline-variant px-4 py-1 text-body-sm text-secondary hover:bg-surface-container-low"
-      >
+      <Button className="w-fit" onClick={() => setOpen(true)}>
         Log action
-      </button>
+      </Button>
       <Modal
         open={open}
         onClose={() => setOpen(false)}

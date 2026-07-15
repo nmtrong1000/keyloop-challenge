@@ -1,7 +1,8 @@
 "use client";
 
-import type { AgeRange } from "@/shared/types/api";
-import { useFilterStore } from "@/shared/store/filterStore";
+import type { AgeRange } from "@/modules/Inventory/types";
+import { useFilterStore } from "../store/filterStore";
+import { Select } from "@/shared/components/Select";
 
 const MAKE_OPTIONS = [
   "Honda",
@@ -41,11 +42,6 @@ const AGE_RANGE_OPTIONS: Array<{ value: AgeRange; label: string }> = [
   { value: "90-plus", label: ">90 days (aging stock)" },
 ];
 
-const selectClassName =
-  "rounded border border-outline-variant bg-surface-container-lowest px-4 py-2 text-body-sm text-on-surface focus:border-secondary focus:outline-none";
-
-const labelClassName = "flex flex-col gap-1 font-mono text-label-sm text-on-surface-variant";
-
 export function FilterControls() {
   const filters = useFilterStore((s) => s.filters);
   const setMake = useFilterStore((s) => s.setMake);
@@ -54,56 +50,30 @@ export function FilterControls() {
 
   return (
     <div className="flex flex-wrap gap-4 py-4">
-      <label className={labelClassName}>
-        Make
-        <select
-          aria-label="Filter by make"
-          value={filters.make ?? ""}
-          onChange={(e) => setMake(e.target.value || undefined)}
-          className={selectClassName}
-        >
-          <option value="">All makes</option>
-          {MAKE_OPTIONS.map((make) => (
-            <option key={make} value={make}>
-              {make}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label className={labelClassName}>
-        Model
-        <select
-          aria-label="Filter by model"
-          value={filters.model ?? ""}
-          onChange={(e) => setModel(e.target.value || undefined)}
-          className={selectClassName}
-        >
-          <option value="">All models</option>
-          {MODEL_OPTIONS.map((model) => (
-            <option key={model} value={model}>
-              {model}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label className={labelClassName}>
-        Age
-        <select
-          aria-label="Filter by age"
-          value={filters.ageRange ?? ""}
-          onChange={(e) => setAgeRange((e.target.value || undefined) as AgeRange | undefined)}
-          className={selectClassName}
-        >
-          <option value="">All ages</option>
-          {AGE_RANGE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <Select
+        label="Make"
+        aria-label="Filter by make"
+        value={filters.make}
+        onChange={setMake}
+        options={MAKE_OPTIONS.map((make) => ({ value: make, label: make }))}
+        placeholder="All makes"
+      />
+      <Select
+        label="Model"
+        aria-label="Filter by model"
+        value={filters.model}
+        onChange={setModel}
+        options={MODEL_OPTIONS.map((model) => ({ value: model, label: model }))}
+        placeholder="All models"
+      />
+      <Select
+        label="Age"
+        aria-label="Filter by age"
+        value={filters.ageRange}
+        onChange={setAgeRange}
+        options={AGE_RANGE_OPTIONS}
+        placeholder="All ages"
+      />
     </div>
   );
 }
