@@ -327,4 +327,10 @@ Per the assessment brief: *"If a requirement is unclear, please make a reasonabl
 
 ## 8. GenAI Usage in the Design Phase
 
-*To be written by the author.*
+GenAI was used five activities, I reviewed, asked follow-up questions and confirmed:
+
+1. **Software Requirement Specification** — Asked GenAI to propose an SRS structure, then filled in content through an iterative Q&A loop until every requirement was unambiguous, producing `docs/SRS_SUPPLY.md`.
+2. **Technology stack shortlist** — Asked GenAI for a checklist of candidate stacks grouped by category (`docs/STACKS.md`), reviewed the pros/cons it listed for each, and made the final decision per category myself.
+3. **System Design Document** — Asked GenAI to propose a structure for `SDD.md`, then worked through it section by section, correcting and clarifying content before accepting each one.
+4. **Task decomposition** — Asked GenAI for epic/story templates, fed it the finished SDD and SRS, and had it break the work into stories (`docs/tasks/`) and define the execution loop (`docs/EXECUTION_LOOP.md`) governing how each story gets implemented.
+5. **Frontend Design System** - Asked GenAI to generate a design system (`docs/DESIGN.md`) — colors, typography, spacing — since the UI had been in poor quality by default, applied in the mid-phase of the task implementation.
