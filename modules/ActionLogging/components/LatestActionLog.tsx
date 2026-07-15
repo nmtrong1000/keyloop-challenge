@@ -1,4 +1,4 @@
-import { isAgingVehicle } from "@/shared/domain/aging";
+import { isAgingVehicle } from "@/modules/AgingStock";
 import type { Vehicle } from "@/shared/types/api";
 
 export function LatestActionLog({ vehicle }: { vehicle: Vehicle }) {

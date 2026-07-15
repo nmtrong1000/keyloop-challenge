@@ -1,10 +1,10 @@
 import { http, HttpResponse } from "msw";
-import type { AgeRange, AgingVehicleAction, SortDir, SortField } from "@/shared/types/api";
-import { isAgingVehicle } from "@/shared/domain/aging";
-import { actionsForVehicle, mostRecentAction } from "@/shared/domain/currentStatus";
-import { matchesFilters } from "@/shared/domain/filters";
-import { paginate } from "@/shared/domain/pagination";
-import { sortVehicles } from "@/shared/domain/sorting";
+import type { AgingVehicleAction } from "@/shared/types/api";
+import type { AgeRange, SortDir, SortField } from "@/modules/Inventory/types";
+import { isAgingVehicle } from "@/modules/AgingStock";
+import { actionsForVehicle, mostRecentAction } from "@/modules/ActionLogging";
+import { matchesFilters, sortVehicles } from "@/modules/Inventory";
+import { paginate } from "@/shared/utils/pagination";
 import { actions, vehicles } from "./fixtures";
 
 const VALID_AGE_RANGES: AgeRange[] = ["0-30", "31-60", "61-90", "90-plus"];

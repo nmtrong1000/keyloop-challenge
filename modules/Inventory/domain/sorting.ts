@@ -1,4 +1,5 @@
-import type { SortDir, SortField, Vehicle } from "@/shared/types/api";
+import type { Vehicle } from "@/shared/types/api";
+import type { SortDir, SortField } from "@/modules/Inventory/types";
 
 /** Pure comparator — no HTTP handler wiring, mirrors filters.ts/pagination.ts. */
 export function sortVehicles(vehicles: Vehicle[], sortBy?: SortField, sortDir: SortDir = "asc"): Vehicle[] {

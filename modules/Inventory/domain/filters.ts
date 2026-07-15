@@ -1,11 +1,6 @@
-import type { AgeRange, Vehicle } from "@/shared/types/api";
-import { daysInInventory } from "./aging";
-
-export interface VehicleFilters {
-  make?: string;
-  model?: string;
-  ageRange?: AgeRange;
-}
+import type { Vehicle } from "@/shared/types/api";
+import type { AgeRange, VehicleFilters } from "@/modules/Inventory/types";
+import { daysInInventory } from "@/modules/AgingStock";
 
 function matchesAgeRange(days: number, ageRange: AgeRange): boolean {
   switch (ageRange) {
