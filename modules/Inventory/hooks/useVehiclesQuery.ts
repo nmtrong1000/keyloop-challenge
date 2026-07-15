@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getVehicles } from "@/shared/dal";
-import { useFilterStore } from "./filterStore";
+import { getVehicles } from "../dal";
+import { useFilterStore } from "../store/filterStore";
 import { vehiclesQueryKey } from "./queryKeys";
 
 /** SDD §4.1: poll every 30-60s (using 45s, the midpoint) so the list stays fresh without a manual refresh. */

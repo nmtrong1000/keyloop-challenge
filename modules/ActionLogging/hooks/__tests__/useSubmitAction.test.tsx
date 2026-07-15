@@ -1,13 +1,16 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { getVehicles, postVehicleAction } from "@/shared/dal";
-import { useFilterStore } from "../filterStore";
+import { getVehicles } from "@/modules/Inventory/dal";
+import { useFilterStore } from "@/modules/Inventory/store/filterStore";
+import { useVehiclesQuery } from "@/modules/Inventory/hooks/useVehiclesQuery";
+import { postVehicleAction } from "../../dal";
 import { useSubmitAction } from "../useSubmitAction";
-import { useVehiclesQuery } from "../useVehiclesQuery";
 
-jest.mock("@/shared/dal", () => ({
+jest.mock("@/modules/Inventory/dal", () => ({
   getVehicles: jest.fn(),
+}));
+jest.mock("../../dal", () => ({
   postVehicleAction: jest.fn(),
 }));
 

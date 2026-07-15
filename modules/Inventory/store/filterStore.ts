@@ -1,17 +1,11 @@
 import { create } from "zustand";
-import type { AgeRange, SortDir, SortField } from "@/shared/types/api";
+import type { AgeRange, SortDir, SortField, VehicleFilters } from "@/modules/Inventory/types";
 import { PAGE_SIZE } from "@/shared/constants";
-
-export interface VehicleFilterSelection {
-  make?: string;
-  model?: string;
-  ageRange?: AgeRange;
-}
 
 interface FilterState {
   page: number;
   pageSize: number;
-  filters: VehicleFilterSelection;
+  filters: VehicleFilters;
   sortBy?: SortField;
   sortDir: SortDir;
   setPage: (page: number) => void;

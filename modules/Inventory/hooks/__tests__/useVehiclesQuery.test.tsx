@@ -1,11 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { getVehicles } from "@/shared/dal";
-import { useFilterStore } from "../filterStore";
+import { getVehicles } from "@/modules/Inventory/dal";
+import { useFilterStore } from "../../store/filterStore";
 import { POLL_INTERVAL_MS, useVehiclesQuery } from "../useVehiclesQuery";
 
-jest.mock("@/shared/dal", () => ({
+jest.mock("@/modules/Inventory/dal", () => ({
   getVehicles: jest.fn(),
 }));
 
