@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useVehicleActionsQuery } from "../hooks/useVehicleActionsQuery";
-import { Button } from "@/shared/components/Button";
+import { Button } from "@/shared/components/elements/Button";
 
 export function ActionHistory({ vehicleId }: { vehicleId: string }) {
   const { data, isLoading, isError } = useVehicleActionsQuery(vehicleId, true);

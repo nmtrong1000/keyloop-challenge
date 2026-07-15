@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Vehicle } from "@/shared/types/api";
 import type { SortDir, SortField } from "@/modules/Inventory/types";
-import { Table, type Column } from "@/shared/components/Table";
+import { Table, type Column } from "@/shared/components/blocks/Table";
 
 export interface VehicleTableProps {
   vehicles: Vehicle[];

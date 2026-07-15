@@ -1,4 +1,4 @@
-import { Nav } from "./Nav";
+import { Nav } from "../blocks/Nav";
 
 export function Sidebar() {
   return (

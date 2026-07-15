@@ -5,7 +5,7 @@
 - Issue type: Epic
 - Priority: High
 - Status: COMPLETED
-- Version: 1.5
+- Version: 1.7
 
 ---
 
@@ -53,6 +53,7 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 - **STORY_16**: Inventory Composition Rename (COMPLETED)
 - **STORY_17**: Observability Completion (Metrics & Traces) (COMPLETED)
 - **STORY_18**: Shared Component Library (Generic Primitives) (COMPLETED)
+- **STORY_19**: Atomic Design Reorganization (COMPLETED)
 
 ## Dependencies
 
@@ -84,6 +85,12 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 ---
 
 ## Changelog
+
+### v1.7
+- STORY_19 (Atomic Design Reorganization) completed: epic re-closed at 19/19.
+
+### v1.6
+- Reopened: added STORY_19 — reorganize `shared/components` into Atomic Design tiers (`elements/`, `blocks/`, `sections/`) and refresh `README.md`'s stale directory structure. Not a new SRS requirement.
 
 ### v1.5
 - STORY_18 (Shared Component Library) completed: epic re-closed at 18/18. STORY_12–18's module-boundary and shared-component cleanup pass is done — `shared/domain`, `shared/dal`, and `shared/store` no longer exist as flat, undifferentiated folders; each module owns its own domain logic, DAL, and state; `shared/types` holds only the API contract; observability's three pillars (Logs/Metrics/Traces) are all wrapped consistently; and six generic UI primitives (`Select`, `Table`, `PaginationControls`, `Badge`, `MetricCard`, `Button`) replace what were hand-rolled, drifted implementations. No SRS requirement changed — this was an internal architecture and reusability pass, verified with the full Jest (99/99) and Playwright (16/16) suites passing unchanged throughout.

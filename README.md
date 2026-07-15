@@ -10,38 +10,44 @@ Feature-based: `modules/` holds one folder per user-facing capability, `shared/`
 
 ```
 .
-├── app/                   Next.js routes — no business logic lives here
-│   ├── layout.tsx         Wires up the mocked backend and data-fetching client for the whole app
-│   └── page.tsx           The dashboard's single page, assembling the modules below
-├── modules/               One folder per user-facing capability, each with a single public entry point
-│   ├── Inventory/         Displays and filters the vehicle inventory
-│   ├── AgingStock/        Flags vehicles past the aging threshold and shows their status
-│   └── ActionLogging/     Lets a manager log and review follow-up actions on aging vehicles
-├── shared/                Cross-cutting code used by more than one module
-│   ├── components/        App-wide setup: the mocked backend and the data-fetching client
-│   ├── domain/            Pure business rules — aging, filtering, pagination
-│   ├── types/             Contract types generated from and matching the API spec
-│   ├── dal/               Typed functions for reading and writing inventory data
-│   ├── mocks/             The mocked backend itself
-│   ├── store/             Caches server data and holds client-side selections (filters, page)
-│   ├── observability/     Structured logging
-│   └── constants.ts       Shared constant values
+├── app/
+│   ├── layout.tsx              Root application layout
+│   └── page.tsx                Default landing page
+├── modules/                    Feature modules organized by business capability
+│   └── <Module>/
+│       ├── components/         UI components specific to the module
+│       ├── domain/             Business logic and domain rules
+│       ├── hooks/              Data-fetching and server-state hooks
+│       ├── store/              Client-side state management
+│       ├── dal.ts              Data access layer for backend communication
+│       └── types.ts            Types and interfaces for the module
+├── shared/                     Reusable code shared across multiple modules
+│   ├── components/             Shared UI building blocks
+│   │   ├── elements/           Basic UI primitives
+│   │   ├── blocks/             Reusable composed components
+│   │   └── sections/           Common page-level layout sections
+│   ├── providers/              Application-wide context providers
+│   ├── mocks/                  Mock API handlers, fixtures, and setup
+│   ├── types/                  Shared API and application types
+│   ├── http.ts                 Common HTTP client utilities
+│   ├── observability/          Logging, monitoring, and tracing utilities
+│   ├── utils/                  General-purpose helper functions
+│   └── constants.ts            Shared constant values
 ├── contracts/
-│   └── openapi.yaml       The API contract this app is built against
-├── e2e/
-│   └── dashboard.spec.ts  End-to-end suite: full flow, responsive layout, performance
+│   └── openapi.yaml            OpenAPI specification
+├── e2e/                        End-to-end tests
 ├── docs/
-│   ├── SRS_SUPPLY.md      Software Requirement Specification
-│   ├── BUSINESS_IDEA.md   The original business idea
-│   ├── STACKS.md          Technology stack decisions
-│   ├── DESIGN.md          The design system
-│   ├── EXECUTION_LOOP.md  The implementation loop and test-placement rules
-│   └── tasks/             Planning and tracking documents
-├── SDD.md                 System Design Document
-└── README.md              You are here
+│   ├── SRS_SUPPLY.md           Software Requirements Specification
+│   ├── BUSINESS_IDEA.md        Product vision and business goals
+│   ├── STACKS.md               Technology stack documentation
+│   ├── DESIGN.md               Design system documentation
+│   ├── EXECUTION_LOOP.md       Development workflow and testing guidelines
+│   └── tasks/                  Project planning and task tracking
+├── SDD.md                      System Design Document
+└── README.md                   Project overview and setup guide
 ```
 
-Tests are colocated in `__tests__/` subfolders next to what they cover (e.g. `shared/domain/__tests__/aging.test.ts`), not gathered in one top-level test tree.
+Tests are colocated in `__tests__/` subfolders next to what they cover (e.g. `modules/AgingStock/domain/__tests__/aging.test.ts`), not gathered in one top-level test tree.
 
 ## Install
 

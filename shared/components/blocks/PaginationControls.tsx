@@ -1,7 +1,7 @@
 "use client";
 
-import { Select } from "./Select";
-import { Button } from "./Button";
+import { Select } from "../elements/Select";
+import { Button } from "../elements/Button";
 
 export interface PaginationControlsProps {
   page: number;

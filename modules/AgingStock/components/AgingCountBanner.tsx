@@ -1,4 +1,4 @@
-import { MetricCard } from "@/shared/components/MetricCard";
+import { MetricCard } from "@/shared/components/blocks/MetricCard";
 
 export function AgingCountBanner({ agingCount }: { agingCount: number }) {
   return (

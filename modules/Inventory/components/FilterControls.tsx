@@ -2,7 +2,7 @@
 
 import type { AgeRange } from "@/modules/Inventory/types";
 import { useFilterStore } from "../store/filterStore";
-import { Select } from "@/shared/components/Select";
+import { Select } from "@/shared/components/elements/Select";
 
 const MAKE_OPTIONS = [
   "Honda",

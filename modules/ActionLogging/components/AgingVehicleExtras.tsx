@@ -3,8 +3,8 @@
 import { useState } from "react";
 import type { Vehicle } from "@/shared/types/api";
 import { isAgingVehicle } from "@/modules/AgingStock";
-import { Modal } from "@/shared/components/Modal";
-import { Button } from "@/shared/components/Button";
+import { Modal } from "@/shared/components/blocks/Modal";
+import { Button } from "@/shared/components/elements/Button";
 import { ActionForm } from "./ActionForm";
 import { ActionHistory } from "./ActionHistory";
 

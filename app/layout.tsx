@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
-import { MockingProvider } from "@/shared/components/MockingProvider";
-import { Providers } from "@/shared/components/Providers";
-import { Sidebar } from "@/shared/components/Sidebar";
-import { Header } from "@/shared/components/Header";
-import { Breadcrumb } from "@/shared/components/Breadcrumb";
+import { MockingProvider } from "@/shared/providers/MockingProvider";
+import { Providers } from "@/shared/providers/Providers";
+import { Sidebar } from "@/shared/components/sections/Sidebar";
+import { Header } from "@/shared/components/sections/Header";
+import { Breadcrumb } from "@/shared/components/sections/Breadcrumb";
 import "./globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({

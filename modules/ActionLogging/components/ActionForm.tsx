@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSubmitAction } from "../hooks/useSubmitAction";
-import { Button } from "@/shared/components/Button";
+import { Button } from "@/shared/components/elements/Button";
 
 const actionSchema = z.object({
   action: z.string().trim().min(1, "Enter a status or proposed action."),
