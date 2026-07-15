@@ -2,12 +2,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
-import { getVehicles } from "@/shared/dal";
+import { getVehicles } from "@/modules/Inventory/dal";
 import { PAGE_SIZE } from "@/shared/constants";
-import { useFilterStore } from "@/shared/store/filterStore";
-import { InventoryPage } from "../InventoryPage";
+import { useFilterStore } from "../../store/filterStore";
+import { InventoryView } from "../InventoryView";
 
-jest.mock("@/shared/dal", () => ({
+jest.mock("@/modules/Inventory/dal", () => ({
   getVehicles: jest.fn(),
 }));
 
@@ -36,15 +36,15 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe("InventoryPage", () => {
+describe("InventoryView", () => {
   it("renders the fetched vehicles", async () => {
-    renderWithClient(<InventoryPage />);
+    renderWithClient(<InventoryView />);
     expect(await screen.findByText("VIN00000001")).toBeInTheDocument();
     expect(within(screen.getByRole("table")).getByText("Honda")).toBeInTheDocument();
   });
 
   it("logs inventory.viewed once after data loads, with page and pageSize", async () => {
-    renderWithClient(<InventoryPage />);
+    renderWithClient(<InventoryView />);
     await screen.findByText("VIN00000001");
 
     const viewedCalls = (console.log as jest.Mock).mock.calls
@@ -56,7 +56,7 @@ describe("InventoryPage", () => {
 
   it("logs inventory.filtered when a filter is applied, not inventory.viewed again", async () => {
     const user = userEvent.setup();
-    renderWithClient(<InventoryPage />);
+    renderWithClient(<InventoryView />);
     await screen.findByText("VIN00000001");
     (console.log as jest.Mock).mockClear();
 
@@ -76,7 +76,7 @@ describe("InventoryPage", () => {
 
   it("records a performance.measure named inventory-render", async () => {
     const measureSpy = jest.spyOn(performance, "measure");
-    renderWithClient(<InventoryPage />);
+    renderWithClient(<InventoryView />);
     await screen.findByText("VIN00000001");
 
     await waitFor(() => {
@@ -92,7 +92,7 @@ describe("InventoryPage", () => {
     const totalCount = PAGE_SIZE * 2;
     mockedGetVehicles.mockResolvedValue({ items: [vehicle], totalCount, agingCount: 5 });
     const user = userEvent.setup();
-    renderWithClient(<InventoryPage />);
+    renderWithClient(<InventoryView />);
     await screen.findByText("VIN00000001");
 
     expect(screen.getByText("Previous")).toBeDisabled();

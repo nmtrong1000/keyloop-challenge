@@ -1,7 +1,7 @@
 "use client";
 
 import { AgingBadge, AgingCountBanner } from "@/modules/AgingStock";
-import { InventoryPage } from "@/modules/Inventory";
+import { InventoryView } from "@/modules/Inventory";
 import { AgingVehicleExtras, LatestActionLog } from "@/modules/ActionLogging";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       </h1>
 
       <div className="mt-6">
-        <InventoryPage
+        <InventoryView
           renderAgingSummary={(agingCount) => <AgingCountBanner agingCount={agingCount} />}
           renderStatus={(vehicle) => <AgingBadge vehicle={vehicle} />}
           renderLog={(vehicle) => <LatestActionLog vehicle={vehicle} />}

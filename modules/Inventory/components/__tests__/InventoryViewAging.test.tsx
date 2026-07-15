@@ -1,14 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { getVehicles } from "@/shared/dal";
-import { useFilterStore } from "@/shared/store/filterStore";
-import { POLL_INTERVAL_MS } from "@/shared/store/useVehiclesQuery";
+import { getVehicles } from "@/modules/Inventory/dal";
+import { useFilterStore } from "../../store/filterStore";
+import { POLL_INTERVAL_MS } from "../../hooks/useVehiclesQuery";
 import { AgingBadge, AgingCountBanner } from "@/modules/AgingStock";
 import { LatestActionLog } from "@/modules/ActionLogging";
-import { InventoryPage } from "../InventoryPage";
+import { InventoryView } from "../InventoryView";
 
-jest.mock("@/shared/dal", () => ({ getVehicles: jest.fn() }));
+jest.mock("@/modules/Inventory/dal", () => ({ getVehicles: jest.fn() }));
 const mockedGetVehicles = getVehicles as jest.Mock;
 
 function renderWithClient(ui: ReactNode) {
@@ -31,7 +31,7 @@ beforeEach(() => {
 
 afterEach(() => jest.restoreAllMocks());
 
-describe("InventoryPage composed with the aging slots (mirrors app/page.tsx)", () => {
+describe("InventoryView composed with the aging slots (mirrors app/page.tsx)", () => {
   it("shows the aging badge, no status, and the global count on first load", async () => {
     mockedGetVehicles.mockResolvedValue({
       items: [agingVehicle],
@@ -40,7 +40,7 @@ describe("InventoryPage composed with the aging slots (mirrors app/page.tsx)", (
     });
 
     renderWithClient(
-      <InventoryPage
+      <InventoryView
         renderAgingSummary={(count) => <AgingCountBanner agingCount={count} />}
         renderStatus={(v) => <AgingBadge vehicle={v} />}
         renderLog={(v) => <LatestActionLog vehicle={v} />}
@@ -61,7 +61,7 @@ describe("InventoryPage composed with the aging slots (mirrors app/page.tsx)", (
     });
 
     renderWithClient(
-      <InventoryPage
+      <InventoryView
         renderAgingSummary={(count) => <AgingCountBanner agingCount={count} />}
         renderStatus={(v) => <AgingBadge vehicle={v} />}
         renderLog={(v) => <LatestActionLog vehicle={v} />}
