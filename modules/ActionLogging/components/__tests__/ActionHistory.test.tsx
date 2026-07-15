@@ -2,10 +2,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
-import { getVehicleActions } from "@/shared/dal";
+import { getVehicleActions } from "@/modules/ActionLogging/dal";
 import { ActionHistory } from "../ActionHistory";
 
-jest.mock("@/shared/dal", () => ({
+jest.mock("@/modules/ActionLogging/dal", () => ({
   getVehicleActions: jest.fn(),
 }));
 const mockedGetVehicleActions = getVehicleActions as jest.Mock;

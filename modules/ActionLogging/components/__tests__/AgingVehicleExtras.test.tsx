@@ -2,11 +2,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
-import { getVehicleActions, postVehicleAction } from "@/shared/dal";
+import { getVehicleActions, postVehicleAction } from "@/modules/ActionLogging/dal";
 import type { Vehicle } from "@/shared/types/api";
 import { AgingVehicleExtras } from "../AgingVehicleExtras";
 
-jest.mock("@/shared/dal", () => ({
+jest.mock("@/modules/ActionLogging/dal", () => ({
   getVehicleActions: jest.fn(),
   postVehicleAction: jest.fn(),
 }));

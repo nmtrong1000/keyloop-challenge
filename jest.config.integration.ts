@@ -35,7 +35,7 @@ const config: Config = {
   testEnvironment: "node",
   testMatch: [
     "<rootDir>/shared/mocks/**/*.test.ts",
-    "<rootDir>/shared/dal/**/*.integration.test.ts",
+    "<rootDir>/modules/**/*.integration.test.ts",
   ],
   transformIgnorePatterns: [`/node_modules/(?!(${ESM_DEPS})/)`],
   transform: {

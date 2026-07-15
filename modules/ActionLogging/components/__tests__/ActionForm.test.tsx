@@ -2,10 +2,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
-import { postVehicleAction } from "@/shared/dal";
+import { postVehicleAction } from "@/modules/ActionLogging/dal";
 import { ActionForm } from "../ActionForm";
 
-jest.mock("@/shared/dal", () => ({
+jest.mock("@/modules/ActionLogging/dal", () => ({
   postVehicleAction: jest.fn(),
 }));
 const mockedPostVehicleAction = postVehicleAction as jest.Mock;
