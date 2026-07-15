@@ -25,25 +25,25 @@ flowchart TB
     Manager["Dealership Manager (User)"]
 
     subgraph SPA["Browser SPA (Container)"]
-        subgraph Modules["UI Modules"]
-            IM["Inventory Module (list + filters: make/model/age)"]
-            ASM["Aging Stock Module (over 90 days, flagged)"]
-            ALM["Action Logging Module (status/action form)"]
-        end
-        State["State Management"]
-        DAL["Data Access Layer (API client / hooks)"]
+        IM["Inventory Module"]
+        ASM["Aging Stock Module"]
+        ALM["Action Logging Module"]
+        DAL["Data Access Layer (API Service)"]
     end
 
     Mock["Mocked Backend (Container)"]
 
-    Manager --> IM
-    Manager --> ASM
-    Manager --> ALM
-    IM --> State
-    ASM --> State
-    ALM --> State
-    State --> DAL
-    DAL <-->|"HTTP or in-process call"| Mock
+    Manager -->|"Views, filters"| IM
+    Manager -->|"Logs"| ALM
+
+    IM --> ASM
+    ALM --> ASM
+    ALM -.->|"Invalidates inventory data"| IM
+
+    IM --> DAL
+    ALM -->|"Submits logs"| DAL
+
+    DAL -->|"HTTP or in-process calls"| Mock
 ```
 
 Rationale in [§5.1](#51-system-level-architecture).
@@ -56,12 +56,11 @@ Structured per arc42's Building Block View black-box template: Name, Responsibil
 
 | Component | Responsibility | Interface (in / out) | Fulfilled Requirements |
 |---|---|---|---|
-| **Inventory Module** | Renders one page of vehicles and filter controls; filter or page changes trigger a new server query | In: filtered/unfiltered vehicle list from State. Out: filter criteria to State | FR: display paginated inventory list; FR: filter by make/model/age server-side |
-| **Aging Stock Module** | Flags vehicles over 90 days on the current page; shows current status and a server-computed aging count | In: vehicle list (with `intakeDate`) and action records from State. Out: aging-flagged subset with current-status badge | FR: identify aging stock; FR: prominently display aging stock; FR: display most recent action as current status; FR: display aging count |
-| **Action Logging Module** | Lets a manager submit a new status/action for an aging vehicle; shows its full action history | In: target vehicle ID, existing action records from State. Out: new `AgingVehicleAction` record (appended, never overwriting prior records) to State | FR: persist status/action for aging vehicle (append-only) |
-| **State Management** | Holds the current page's vehicles and actions; single source of truth; polls the active query | In: fetched data from Data Access Layer, module-triggered actions. Out: current state to all UI Modules | Cross-cutting |
-| **Data Access Layer** | Abstracts calls to the mocked backend; isolates UI Modules from the mock implementation detail | In: page, filters, read/write calls from State. Out: calls to Mocked Backend | Cross-cutting; enables swapping the mock for a real backend later |
-| **Mocked Backend** | Serves vehicle inventory data and persists action records, per SRS constraint (no real DB) | In: paginated/filtered requests from Data Access Layer. Out: page of vehicle/action data | Constraint: backend mocked, no persistent database |
+| **Inventory Module** | Renders one page of vehicles and filters; filter/page changes trigger a new query | In: vehicles from DAL. Out: filter/sort/page params to DAL | FR: display paginated inventory list; FR: filter by make/model/age server-side |
+| **Aging Stock Module** | Flags vehicles over 90 days; renders a server-computed aging count | In: Vehicle or count via props. Out: badge/banner UI; rule reused by IM, ALM | FR: identify aging stock; FR: prominently display aging stock; FR: display aging count |
+| **Action Logging Module** | Lets a manager submit a status/action for an aging vehicle; shows history and current status | In: vehicle ID from IM, records from DAL. Out: new action; invalidates IM's cache | FR: persist status/action for aging vehicle (append-only); FR: display most recent action as current status |
+| **Data Access Layer** | Abstracts calls to the mock for Inventory and Action Logging Modules | In: params from IM; read/write calls from ALM. Out: calls to Mock | Cross-cutting (Inventory, Action Logging — Aging Stock needs neither); enables swapping the mock for a real backend later |
+| **Mocked Backend** | Serves vehicle inventory data and persists action records; no real DB, per SRS | In: paginated/filtered requests from DAL. Out: page of vehicle/action data | Constraint: backend mocked, no persistent database |
 
 ---
 
@@ -121,7 +120,6 @@ sequenceDiagram
     actor Manager
     participant IM as Inventory Module
     participant ASM as Aging Stock Module
-    participant State as State Management
     participant DAL as Data Access Layer
     participant Mock as Mocked Backend
 
@@ -129,22 +127,20 @@ sequenceDiagram
     IM->>DAL: Request page 1
     DAL->>Mock: GET /vehicles?page&pageSize
     Mock-->>DAL: Page of vehicles, aging count
-    DAL-->>State: Store page
-    State-->>ASM: Flag aging vehicles on page
-    State-->>IM: Render page
-    ASM-->>IM: Show aging count
+    DAL-->>IM: Page of vehicles
+    IM->>ASM: Flag aging vehicles, show aging count
+    ASM-->>IM: Render badge / count banner
     Manager->>IM: Apply filter (make/model/age)
     IM->>DAL: Request page with filter
     DAL->>Mock: GET /vehicles?filter&page
     Mock-->>DAL: Filtered page
-    DAL-->>State: Store filtered page
+    DAL-->>IM: Filtered page
 
     loop Every 30-60s (background polling)
         DAL->>Mock: GET /vehicles (current page/filter)
         Mock-->>DAL: Refreshed page
-        DAL-->>State: Update page
-        State-->>ASM: Re-flag aging vehicles
-        State-->>IM: Re-render (active filter still applied)
+        DAL-->>IM: Update page (active filter still applied)
+        IM->>ASM: Re-flag aging vehicles
     end
 ```
 
@@ -154,7 +150,7 @@ sequenceDiagram
 sequenceDiagram
     actor Manager
     participant ALM as Action Logging Module
-    participant State as State Management
+    participant IM as Inventory Module
     participant DAL as Data Access Layer
     participant Mock as Mocked Backend
 
@@ -162,8 +158,13 @@ sequenceDiagram
     ALM->>DAL: Persist action
     DAL->>Mock: POST /vehicles/:id/actions
     Mock-->>DAL: Confirmation
-    DAL-->>State: Update action record
-    State-->>ALM: Reflect updated status (no manual refresh)
+    DAL-->>ALM: New action record
+    ALM->>IM: Invalidate cached vehicle list
+    IM->>DAL: Re-request current page
+    DAL->>Mock: GET /vehicles (current page/filter)
+    Mock-->>DAL: Refreshed page (updated status)
+    DAL-->>IM: Refreshed page
+    IM-->>Manager: Reflect updated status (no manual refresh)
 ```
 
 ---
@@ -197,7 +198,6 @@ Structured per arc42 Section 4: each heavy decision recorded as Decision / Justi
 
 **Consequences:**
 - Each feature folder is self-contained and traceable to the SRS requirement it fulfills.
-- Cross-cutting code (State, Data Access Layer) still needs a shared location outside feature folders.
 - Revisit if module boundaries in §2 change — folder structure must move in lockstep.
 
 ---
