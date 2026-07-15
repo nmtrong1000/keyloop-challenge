@@ -4,8 +4,8 @@
 
 - Issue type: Epic
 - Priority: High
-- Status: TODO
-- Version: 1.0
+- Status: COMPLETED
+- Version: 1.3
 
 ---
 
@@ -35,16 +35,17 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 
 ## Child Stories
 
-- **STORY_01**: Project Scaffold (TODO)
-- **STORY_02**: API Contract Definition (TODO)
-- **STORY_03**: Mocked Backend (MSW) (TODO)
-- **STORY_04**: Data Access Layer (TODO)
-- **STORY_05**: State Management (TODO)
-- **STORY_06**: Inventory Module (TODO)
-- **STORY_07**: Aging Stock Module (TODO)
-- **STORY_08**: Action Logging Module (TODO)
-- **STORY_09**: Observability Instrumentation (TODO)
-- **STORY_10**: Responsive, Cross-Browser & Accessibility Verification (TODO)
+- **STORY_01**: Project Scaffold (COMPLETED)
+- **STORY_02**: API Contract Definition (COMPLETED)
+- **STORY_03**: Mocked Backend (MSW) (COMPLETED)
+- **STORY_04**: Data Access Layer (COMPLETED)
+- **STORY_05**: State Management (COMPLETED)
+- **STORY_06**: Inventory Module (COMPLETED — reopened for page-size selection + column sorting, see story file)
+- **STORY_07**: Aging Stock Module (COMPLETED — SSR deviation flagged; module-boundary drift found and fixed, see story file)
+- **STORY_08**: Action Logging Module (COMPLETED — added GET /vehicles/:id/actions, see story file)
+- **STORY_09**: Observability Instrumentation (COMPLETED — re-scoped, see story file)
+- **STORY_10**: Responsive, Cross-Browser & Accessibility Verification (COMPLETED — found & fixed a real mobile overflow bug)
+- **STORY_11**: UI System Refactor (Design Tokens & Page Shell) (COMPLETED)
 
 ## Dependencies
 
@@ -60,14 +61,31 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 
 ## Success Metrics
 
-- **Story Completion**: 10/10 child stories COMPLETED
-- **Test Coverage**: automated tests covering domain logic, DAL, state, and all three UI modules
-- **Cross-Browser Pass Rate**: full pass on Chrome, Edge, and Safari; desktop, tablet, and mobile
-- **Render Performance**: within the 2s/500-vehicle target (SRS Time Behaviour NFR)
+- **Story Completion**: 11/11 child stories COMPLETED
+- **Test Coverage**: 98 Jest tests covering aging calc, filters, sorting, pagination, DAL, state, and all three UI modules — met
+- **Cross-Browser Pass Rate**: 16/16 Playwright tests pass on Chrome and Safari; Edge represented via Chromium (see STORY_10) — met with a documented substitution
+- **Render Performance**: Verified ~300-700ms per page in practice, against the 2s/500-vehicle target — met
+
+## Known Gaps (carried from child stories, not silently dropped)
+
+- **SDD's "SSR is actively used" claim is not true in this build** (STORY_07): composing `InventoryPage` via render-prop slots forced `app/page.tsx` to become a Client Component; the whole page is client-rendered, not server-prefetched/hydrated.
+- **"Edge" browser coverage is Chromium, not the real msedge channel** (STORY_10): installing real Edge needs `sudo`, unavailable in this sandboxed environment.
+- **`docs/tasks/STORY_02.md`'s frozen contract needed three follow-up amendments** (`currentStatus` in STORY_07, `GET /vehicles/:id/actions` in STORY_08, `sortBy`/`sortDir` in STORY_06) — contract-first didn't fully anticipate the read side of Actionable Insights or column sorting. All three amendments are backward-compatible additions, not breaking changes.
+- **`DESIGN.md` has no "warning" color role** (STORY_11): the aging-stock badge/banner still uses Tailwind's built-in amber palette rather than a design-system token, since none exists for that semantic state.
+- **Dark mode dropped** (STORY_11): the starter template's `dark:` Tailwind variants were removed rather than restyled, since `DESIGN.md` defines only one (light) palette.
 
 ---
 
 ## Changelog
+
+### v1.3
+- Reopened and re-closed STORY_06: added page-size selection and column sorting (Make/Model/Intake Date) to the Inventory module, with a third backward-compatible contract amendment (`sortBy`/`sortDir`). Not a new SRS requirement — a usability improvement to the existing pagination/list feature.
+
+### v1.2
+- STORY_11 (UI System Refactor) completed: design tokens, fonts, and page shell applied; epic re-closed at 11/11.
+
+### v1.1
+- Reopened: added STORY_11 (UI System Refactor) — the shipped UI's visual quality was found lacking after the epic was marked complete; not a new SRS requirement, a design-system application pass.
 
 ### v1.0
 - Initial version
