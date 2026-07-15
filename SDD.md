@@ -284,10 +284,9 @@ Emitted as structured JSON to `console.log`; the destination is swappable withou
 The SRS's Time Behaviour NFR (2 seconds per page, up to 500 vehicles) is instrumented via the Performance API:
 
 ```ts
-performance.mark("inventory-render-start");
+markStart("inventory-render");
 // ...render...
-performance.mark("inventory-render-end");
-performance.measure("inventory-render", "inventory-render-start", "inventory-render-end");
+markEnd("inventory-render");
 ```
 
 No dedicated metrics backend (Prometheus/Datadog) is introduced — unused weight at this scale. **Fulfills:** SRS NFR — Time Behaviour.
@@ -297,9 +296,9 @@ No dedicated metrics backend (Prometheus/Datadog) is introduced — unused weigh
 No distributed backend to trace across services. Reinterpreted: a correlation ID carried through the log entry and mock API call traces the interaction across module boundaries instead:
 
 ```ts
-const correlationId = crypto.randomUUID();
+const correlationId = generateCorrelationId();
 logEvent("aging_vehicle.action_logged", { vehicleId, action, correlationId });
-dataAccessLayer.postAction(vehicleId, action, { headers: { "X-Correlation-Id": correlationId } });
+postVehicleAction(vehicleId, action, { correlationId });
 ```
 
 MSW's network-layer interception shows the request in DevTools with real timing — combined with the correlation ID, that's today's trace. **Fulfills:** assessment brief — "Build for the Future".
