@@ -90,7 +90,6 @@ sequenceDiagram
     Manager->>IM: Apply filter/pagination/sort
     IM->>Mock: GET /vehicles?filter&page&sort
     Mock-->>IM: Filtered/sorted/paged result
-    IM->>ASM: Re-render aging badges + count
 ```
 
 ### 4.2 View Action History
