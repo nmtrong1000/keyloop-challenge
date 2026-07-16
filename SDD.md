@@ -82,13 +82,13 @@ sequenceDiagram
     participant Mock as Mocked Backend
 
     Manager->>IM: Open dashboard
-    IM->>Mock: GET /vehicles?page=1&pageSize=20
-    Mock-->>IM: Page of vehicles, aging count
-    IM->>ASM: Render aging badges + count
-    ASM-->>IM: Badge / count banner
+    IM->>Mock: Fetch vehicle list
+    Mock-->>IM: List of vehicles
+    IM->>ASM: Identify aging vehicles
+    ASM-->>IM: Vehicles with "Aging Stock" badges
 
     Manager->>IM: Apply filter/pagination/sort
-    IM->>Mock: GET /vehicles?filter&page&sort
+    IM->>Mock: Refetch vehicle list with filters
     Mock-->>IM: Filtered/sorted/paged result
 ```
 
@@ -101,9 +101,9 @@ sequenceDiagram
     participant Mock as Mocked Backend
 
     Manager->>ALM: Open "Log action" on an aging vehicle
-    ALM->>Mock: GET /vehicles/:id/actions
-    Mock-->>ALM: Full history, most recent first
-    ALM-->>Manager: Render history alongside the submission form
+    ALM->>Mock: Fetch action history
+    Mock-->>ALM: Full history
+    ALM-->>Manager: Show history alongside the submission form
 ```
 
 ### 4.3 Log Aging-Vehicle Action
@@ -115,13 +115,13 @@ sequenceDiagram
     participant IM as Inventory Module
     participant Mock as Mocked Backend
 
-    Manager->>ALM: Submit status/action for aging vehicle
-    ALM->>Mock: POST /vehicles/:id/actions
-    Mock-->>ALM: Confirmation, new action record
+    Manager->>ALM: Submit action/decision for the aging vehicle
+    ALM->>Mock: Send the submit form
+    Mock-->>ALM: New action record
     ALM->>IM: Invalidate cached vehicle list
-    IM->>Mock: Re-request current page
-    Mock-->>IM: Refreshed page (updated status)
-    IM-->>Manager: Reflect updated status (no manual refresh)
+    IM->>Mock: Refetch vehicle list 
+    Mock-->>IM: New list result
+    IM-->>Manager: Reflect updated status
 ```
 
 ---
