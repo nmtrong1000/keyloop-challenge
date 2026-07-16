@@ -10,6 +10,14 @@ function daysAgo(days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+beforeEach(() => {
+  jest.useFakeTimers().setSystemTime(TODAY);
+});
+
+afterEach(() => {
+  jest.useRealTimers();
+});
+
 describe("AgingBadge", () => {
   it("renders nothing for a vehicle 90 days old or fewer", () => {
     const vehicle: Vehicle = { vin: "V1", make: "Honda", model: "Accord", intakeDate: daysAgo(90) };
