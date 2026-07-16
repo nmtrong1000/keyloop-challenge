@@ -20,6 +20,11 @@ async function parseErrorMessage(res: Response): Promise<string> {
 
 /** The only way any module's DAL talks to the mocked backend — fetch, error-parse, JSON-parse in one place. */
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  if (typeof window !== "undefined") {
+    const { workerReady } = await import("@/shared/mocks/browser");
+    await workerReady;
+  }
+
   const url = new URL(path, getBaseUrl());
   const res = await fetch(url.toString(), init);
   if (!res.ok) {

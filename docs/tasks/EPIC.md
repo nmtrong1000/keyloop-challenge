@@ -5,7 +5,7 @@
 - Issue type: Epic
 - Priority: High
 - Status: COMPLETED
-- Version: 1.7
+- Version: 1.8
 
 ---
 
@@ -54,6 +54,7 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 - **STORY_17**: Observability Completion (Metrics & Traces) (COMPLETED)
 - **STORY_18**: Shared Component Library (Generic Primitives) (COMPLETED)
 - **STORY_19**: Atomic Design Reorganization (COMPLETED)
+- **STORY_20**: Server-Side Rendering (SSR) Implementation (COMPLETED)
 
 ## Dependencies
 
@@ -69,14 +70,13 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 
 ## Success Metrics
 
-- **Story Completion**: 18/18 child stories COMPLETED
+- **Story Completion**: 20/20 child stories COMPLETED
 - **Test Coverage**: 99 Jest tests covering aging calc, filters, sorting, pagination, DAL, state, and all three UI modules — met
 - **Cross-Browser Pass Rate**: 16/16 Playwright tests pass on Chrome and Safari; Edge represented via Chromium (see STORY_10) — met with a documented substitution
 - **Render Performance**: Verified ~300-700ms per page in practice, against the 2s/500-vehicle target — met
 
 ## Known Gaps (carried from child stories, not silently dropped)
 
-- **SDD's "SSR is actively used" claim is not true in this build** (STORY_07): composing `InventoryView` (renamed from `InventoryPage` in STORY_16) via render-prop slots forced `app/page.tsx` to become a Client Component; the whole page is client-rendered, not server-prefetched/hydrated.
 - **"Edge" browser coverage is Chromium, not the real msedge channel** (STORY_10): installing real Edge needs `sudo`, unavailable in this sandboxed environment.
 - **`docs/tasks/STORY_02.md`'s frozen contract needed three follow-up amendments** (`currentStatus` in STORY_07, `GET /vehicles/:id/actions` in STORY_08, `sortBy`/`sortDir` in STORY_06) — contract-first didn't fully anticipate the read side of Actionable Insights or column sorting. All three amendments are backward-compatible additions, not breaking changes.
 - **`DESIGN.md` has no "warning" color role** (STORY_11): the aging-stock badge/banner still uses Tailwind's built-in amber palette rather than a design-system token, since none exists for that semantic state.
@@ -85,6 +85,9 @@ Dealership managers currently have no dedicated view of vehicle stock, no way to
 ---
 
 ## Changelog
+
+### v1.8
+- STORY_20 (Server-Side Rendering Implementation) completed: epic re-closed at 20/20. Resolved the "SSR is actively used" Known Gap flagged in STORY_07 — `app/page.tsx` now genuinely server-prefetches the first page via `msw/node`, hydrated into the browser. Also corrected the Story Completion metric (18/18 → 19/19 → 20/20), which had gone stale after STORY_19.
 
 ### v1.7
 - STORY_19 (Atomic Design Reorganization) completed: epic re-closed at 19/19.

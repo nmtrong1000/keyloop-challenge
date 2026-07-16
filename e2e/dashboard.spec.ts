@@ -112,6 +112,7 @@ test.describe("Performance (SRS Time Behaviour NFR)", () => {
   }) => {
     await page.goto("/");
     await expect(page.getByRole("table")).toBeVisible();
+    await page.waitForFunction(() => performance.getEntriesByName("inventory-render").length > 0);
 
     const durationMs = await page.evaluate(() => {
       const entries = performance.getEntriesByName("inventory-render");
